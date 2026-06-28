@@ -11,18 +11,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .screen{display:none;}
 .screen.active{display:block;}
 
-/* 입장 화면 */
 .intro-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 0;}
 .intro-title-box{border:3px solid #1a1a1a;border-radius:6px;padding:10px 28px;margin-bottom:24px;background:#fff;}
 .intro-title{font-size:22px;font-weight:700;color:#1a1a1a;letter-spacing:0.04em;font-family:Georgia,serif;}
-
 .booth-svg{width:100%;max-width:300px;}
-
-.enter-btn{margin-top:20px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:2.5px solid #1a1a1a;border-radius:8px;padding:14px 36px;font-size:16px;font-weight:700;color:#1a1a1a;cursor:pointer;font-family:Georgia,serif;letter-spacing:0.02em;}
+.enter-btn{margin-top:20px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:2.5px solid #1a1a1a;border-radius:8px;padding:14px 36px;font-size:16px;font-weight:700;color:#1a1a1a;cursor:pointer;font-family:Georgia,serif;}
 .enter-btn:active{background:#f5f5f5;}
 .made-by{font-size:11px;color:#aaa;margin-top:16px;text-align:center;}
 
-/* 촬영 화면 */
 .header{text-align:center;padding:16px 0 10px;}
 .badge{display:inline-block;background:#1a3a5c;color:#fff;font-size:11px;padding:4px 12px;border-radius:20px;margin-bottom:8px;}
 .title{font-size:20px;font-weight:700;color:#1a1a1a;line-height:1.3;}
@@ -37,9 +33,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .flash.on{opacity:0.9;}
 .countdown{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);}
 .countdown.on{display:flex;}
-.countdown-num{font-size:80px;font-weight:700;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.4);}
+.countdown-num{font-size:80px;font-weight:700;color:#fff;}
 .no-cam{position:absolute;inset:0;background:#222;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
-.no-cam.show{display:flex;}
 .no-cam-txt{color:rgba(255,255,255,0.7);font-size:13px;text-align:center;line-height:1.6;padding:0 20px;}
 .shutter-row{display:flex;justify-content:center;padding:10px 0 6px;}
 .shutter{width:64px;height:64px;border-radius:50%;background:#fff;border:5px solid rgba(0,0,0,0.1);box-shadow:0 2px 8px rgba(0,0,0,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -47,17 +42,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .shutter-in{width:50px;height:50px;border-radius:50%;background:#fff;border:2px solid #ddd;}
 .shutter.disabled{opacity:0.4;pointer-events:none;}
 
-/* 결과 2x2 그리드 */
 .result-outer{display:flex;justify-content:center;margin:10px 0;}
 .film{background:#fff;border-radius:14px;padding:12px 12px 10px;box-shadow:0 2px 20px rgba(0,0,0,0.10);position:relative;width:280px;overflow:visible;}
 .film-photos{display:grid;grid-template-columns:1fr 1fr;gap:5px;position:relative;z-index:1;}
-.film-slot{aspect-ratio:3/4;background:#f0ede8;border-radius:6px;overflow:hidden;position:relative;}
+.film-slot{aspect-ratio:3/4;background:#f0ede8;border-radius:6px;overflow:hidden;}
 .film-slot img.photo{width:100%;height:100%;object-fit:cover;display:block;}
 .deco-img{position:absolute;pointer-events:none;z-index:10;}
 .film-footer{text-align:center;margin-top:8px;padding-top:6px;border-top:1px solid #f0ede8;position:relative;z-index:1;}
 .film-logo{font-size:11px;font-weight:700;color:#1a3a5c;letter-spacing:0.08em;}
 .film-date{font-size:10px;color:#bbb;margin-top:2px;}
-
 .btn-main{width:100%;padding:15px;background:#1a3a5c;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;-webkit-appearance:none;}
 .btn-main:active{opacity:0.85;}
 .btn-sub{width:100%;padding:13px;background:#fff;border:1.5px solid #ddd;border-radius:14px;font-size:14px;color:#333;cursor:pointer;margin-top:8px;-webkit-appearance:none;}
@@ -68,52 +61,36 @@ canvas{display:none;}
 <body>
 <div class="wrap">
 
-  <!-- 입장 화면 -->
   <div class="screen active" id="s-intro">
     <div class="intro-wrap">
       <div class="intro-title-box">
         <div class="intro-title">GOZIP PHOTO BOOTH</div>
       </div>
-
-      <!-- 포토부스 일러스트 SVG -->
       <svg class="booth-svg" viewBox="0 0 300 380" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 기계 외형 -->
         <rect x="30" y="20" width="240" height="340" rx="12" fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
-        <!-- 상단 간판 -->
         <rect x="50" y="35" width="200" height="44" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="2.5"/>
         <text x="150" y="63" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a" font-family="Georgia,serif">PHOTO BOOTH</text>
-        <!-- 간판 좌우 장식 -->
         <line x1="30" y1="50" x2="50" y2="50" stroke="#1a1a1a" stroke-width="2.5"/>
         <line x1="250" y1="50" x2="270" y2="50" stroke="#1a1a1a" stroke-width="2.5"/>
         <rect x="20" y="44" width="10" height="14" rx="2" fill="#1a1a1a"/>
         <rect x="270" y="44" width="10" height="14" rx="2" fill="#1a1a1a"/>
-
-        <!-- 네컷 미리보기 창 -->
         <rect x="55" y="95" width="110" height="130" rx="6" fill="#f0ede8" stroke="#1a1a1a" stroke-width="2"/>
         <rect x="60" y="100" width="46" height="58" rx="3" fill="#ddd" stroke="#1a1a1a" stroke-width="1.5"/>
         <rect x="113" y="100" width="46" height="58" rx="3" fill="#ddd" stroke="#1a1a1a" stroke-width="1.5"/>
         <rect x="60" y="163" width="46" height="57" rx="3" fill="#ddd" stroke="#1a1a1a" stroke-width="1.5"/>
         <rect x="113" y="163" width="46" height="57" rx="3" fill="#ddd" stroke="#1a1a1a" stroke-width="1.5"/>
         <text x="110" y="240" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">featured strips</text>
-
-        <!-- 오른쪽 커튼 영역 -->
         <rect x="185" y="95" width="75" height="180" rx="4" fill="#f8f4f0" stroke="#1a1a1a" stroke-width="2"/>
-        <!-- 커튼 선 -->
         <path d="M200 95 C205 130 198 160 203 200 C208 240 200 260 203 275" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
         <path d="M215 95 C220 135 213 165 218 205 C223 245 215 258 218 275" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
         <path d="M230 95 C235 130 228 160 233 200 C238 240 230 260 233 275" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
         <path d="M245 95 C250 135 243 165 248 205 C253 245 245 258 248 275" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- 의자 -->
         <rect x="205" y="285" width="40" height="8" rx="3" fill="#1a1a1a"/>
         <rect x="220" y="293" width="10" height="30" rx="2" fill="#1a1a1a"/>
         <ellipse cx="225" cy="330" rx="18" ry="6" fill="#1a1a1a"/>
-
-        <!-- 동전 투입구 -->
         <rect x="55" y="245" width="36" height="50" rx="4" fill="#e8e0d8" stroke="#1a1a1a" stroke-width="2"/>
         <rect x="68" y="255" width="10" height="14" rx="2" fill="#1a1a1a"/>
         <rect x="68" y="274" width="10" height="4" rx="1" fill="#1a1a1a"/>
-
-        <!-- 유채꽃 장식 -->
         <circle cx="110" cy="300" r="7" fill="#FFD600"/>
         <circle cx="110" cy="300" r="2.5" fill="#FF9900"/>
         <ellipse cx="110" cy="291" rx="3.5" ry="6" fill="#FFD600"/>
@@ -121,7 +98,6 @@ canvas{display:none;}
         <ellipse cx="101" cy="300" rx="6" ry="3.5" fill="#FFD600"/>
         <ellipse cx="119" cy="300" rx="6" ry="3.5" fill="#FFD600"/>
         <line x1="110" y1="316" x2="108" y2="340" stroke="#5a9e3a" stroke-width="2" stroke-linecap="round"/>
-
         <circle cx="145" cy="295" r="5.5" fill="#FFD600"/>
         <circle cx="145" cy="295" r="2" fill="#FF9900"/>
         <ellipse cx="145" cy="288" rx="3" ry="5" fill="#FFD600"/>
@@ -129,21 +105,15 @@ canvas{display:none;}
         <ellipse cx="138" cy="295" rx="5" ry="3" fill="#FFD600"/>
         <ellipse cx="152" cy="295" rx="5" ry="3" fill="#FFD600"/>
         <line x1="145" y1="308" x2="143" y2="340" stroke="#5a9e3a" stroke-width="2" stroke-linecap="round"/>
-
-        <!-- 고집이 -->
         <text x="248" y="355" text-anchor="middle" font-size="28">🐟</text>
-
-        <!-- 화살표 + enter -->
         <rect x="170" y="308" width="100" height="32" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
         <text x="220" y="329" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a" font-family="Georgia,serif">enter →</text>
       </svg>
-
-      <button class="enter-btn" onclick="enterBooth()">enter →</button>
+      <button class="enter-btn" id="enter-btn">enter →</button>
       <div class="made-by">고집돌우럭 × AI 네컷</div>
     </div>
   </div>
 
-  <!-- 촬영 -->
   <div class="screen" id="s-cam">
     <div class="header">
       <div class="badge">고집돌우럭 × 네컷</div>
@@ -168,11 +138,10 @@ canvas{display:none;}
       </div>
     </div>
     <div class="shutter-row">
-      <div class="shutter" id="shutter-btn" onclick="startCountdown()"><div class="shutter-in"></div></div>
+      <div class="shutter" id="shutter-btn"><div class="shutter-in"></div></div>
     </div>
   </div>
 
-  <!-- 결과 -->
   <div class="screen" id="s-result">
     <div class="header">
       <div class="badge">완성!</div>
@@ -219,87 +188,138 @@ canvas{display:none;}
         </div>
       </div>
     </div>
-    <button class="btn-main" onclick="savePhoto()">📥 사진 저장하기</button>
-    <button class="btn-sub" onclick="sharePhoto()">📤 SNS 공유하기</button>
-    <button class="btn-sub" onclick="restart()">🔄 다시 찍기</button>
+    <button class="btn-main" id="save-btn">📥 사진 저장하기</button>
+    <button class="btn-sub" id="share-btn">📤 SNS 공유하기</button>
+    <button class="btn-sub" id="restart-btn">🔄 다시 찍기</button>
   </div>
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-var photos=[],stream=null,counting=false;
+var photos = [];
+var stream = null;
+var counting = false;
 
-function enterBooth(){navigator.mediaDevices&&navigator.mediaDevices.getUserMedia({video:true,audio:false}).then(function(s){stream=s;show("s-cam");var v=document.getElementById("preview");v.srcObject=s;document.getElementById("no-cam").style.display="none";}).catch(function(){alert("카메라 권한을 허용해주세요!");});return;
+function show(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function updateDots() {
+  for (var i = 0; i < 4; i++) {
+    var d = document.getElementById('d' + i);
+    if (i < photos.length) d.classList.add('on');
+    else d.classList.remove('on');
+  }
+  document.getElementById('count-lbl').textContent = (photos.length < 4 ? (photos.length + 1) + ' / 4 번째 사진' : '4 / 4 완료!');
+}
+
+function startCamera() {
+  var v = document.getElementById('preview');
+  var n = document.getElementById('no-cam');
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(s) {
+      stream = s;
+      v.srcObject = s;
+      n.style.display = 'none';
+    })
+    .catch(function(err) {
+      console.log('Camera error:', err);
+      n.style.display = 'flex';
+    });
+  } else {
+    n.style.display = 'flex';
+  }
+}
+
+function stopCamera() {
+  if (stream) { stream.getTracks().forEach(function(t) { t.stop(); }); stream = null; }
+  document.getElementById('preview').srcObject = null;
+}
+
+function startCountdown() {
+  if (counting || photos.length >= 4) return;
+  counting = true;
+  document.getElementById('shutter-btn').classList.add('disabled');
+  var cd = document.getElementById('countdown');
+  var num = document.getElementById('countdown-num');
+  cd.classList.add('on');
+  var n = 3; num.textContent = n;
+  var iv = setInterval(function() {
+    n--;
+    if (n > 0) { num.textContent = n; }
+    else { clearInterval(iv); cd.classList.remove('on'); takePhoto(); }
+  }, 1000);
+}
+
+function takePhoto() {
+  var v = document.getElementById('preview');
+  var c = document.getElementById('snap-canvas');
+  var f = document.getElementById('flash');
+  f.classList.add('on');
+  setTimeout(function() { f.classList.remove('on'); }, 150);
+  c.width = v.videoWidth || 480;
+  c.height = v.videoHeight || 640;
+  var ctx = c.getContext('2d');
+  ctx.drawImage(v, 0, 0, c.width, c.height);
+  var url = c.toDataURL('image/jpeg', 0.88);
+  photos.push(url);
+  var slot = document.getElementById('slot-' + (photos.length - 1));
+  var img = document.createElement('img');
+  img.className = 'photo';
+  img.src = url;
+  slot.appendChild(img);
+  updateDots();
+  counting = false;
+  document.getElementById('shutter-btn').classList.remove('disabled');
+  if (photos.length === 4) {
+    setTimeout(function() { stopCamera(); buildResult(); show('s-result'); }, 500);
+  }
+}
+
+function buildResult() {
+  var d = new Date();
+  document.getElementById('film-date').textContent = d.getFullYear() + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getDate().toString().padStart(2, '0') + ' · JEJU';
+}
+
+// 이벤트 리스너 방식으로 변경
+document.getElementById('enter-btn').addEventListener('click', function() {
   show('s-cam');
   startCamera();
-}
+});
 
-function startCamera(){
-  var v=document.getElementById('preview'),n=document.getElementById('no-cam');
-  var constraints={video:true,audio:false};
-  if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-    navigator.mediaDevices.getUserMedia(constraints)
-    .then(function(s){stream=s;v.srcObject=s;n.style.display='none';})
-    .catch(function(){n.style.display='flex';});
-  } else {n.style.display='flex';}
-}
+document.getElementById('shutter-btn').addEventListener('click', function() {
+  startCountdown();
+});
 
-function stopCamera(){
-  if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
-  document.getElementById('preview').srcObject=null;
-}
-function updateDots(){
-  for(var i=0;i<4;i++){var d=document.getElementById('d'+i);if(i<photos.length)d.classList.add('on');else d.classList.remove('on');}
-  document.getElementById('count-lbl').textContent=(photos.length<4?(photos.length+1)+' / 4 번째 사진':'4 / 4 완료!');
-}
-function startCountdown(){
-  if(counting||photos.length>=4)return;
-  counting=true;
-  document.getElementById('shutter-btn').classList.add('disabled');
-  var cd=document.getElementById('countdown'),num=document.getElementById('countdown-num');
-  cd.classList.add('on');var n=3;num.textContent=n;
-  var iv=setInterval(function(){n--;if(n>0){num.textContent=n;}else{clearInterval(iv);cd.classList.remove('on');takePhoto();}},1000);
-}
-function takePhoto(){
-  var v=document.getElementById('preview'),c=document.getElementById('snap-canvas'),f=document.getElementById('flash');
-  f.classList.add('on');setTimeout(function(){f.classList.remove('on');},150);
-  c.width=v.videoWidth||480;c.height=v.videoHeight||640;
-  var ctx=c.getContext('2d');
-  ctx.drawImage(v,0,0,c.width,c.height);
-  var url=c.toDataURL('image/jpeg',0.88);
-  photos.push(url);
-  var slot=document.getElementById('slot-'+(photos.length-1));
-  var img=document.createElement('img');img.className='photo';img.src=url;slot.appendChild(img);
-  updateDots();counting=false;
-  document.getElementById('shutter-btn').classList.remove('disabled');
-  if(photos.length===4){setTimeout(function(){stopCamera();buildResult();show('s-result');},500);}
-}
-function buildResult(){
-  var d=new Date();
-  document.getElementById('film-date').textContent=d.getFullYear()+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getDate().toString().padStart(2,'0')+' · JEJU';
-}
-function show(id){
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
-  document.getElementById(id).classList.add('active');window.scrollTo(0,0);
-}
-function savePhoto(){
-  var film=document.getElementById('film');
-  if(typeof html2canvas!=='undefined'){
-    html2canvas(film,{scale:3,backgroundColor:'#ffffff',useCORS:true,allowTaint:true}).then(function(c){
-      var a=document.createElement('a');a.download='고집돌네컷.jpg';a.href=c.toDataURL('image/jpeg',0.95);a.click();
+document.getElementById('save-btn').addEventListener('click', function() {
+  var film = document.getElementById('film');
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(film, { scale: 3, backgroundColor: '#ffffff', useCORS: true, allowTaint: true }).then(function(c) {
+      var a = document.createElement('a');
+      a.download = '고집돌네컷.jpg';
+      a.href = c.toDataURL('image/jpeg', 0.95);
+      a.click();
     });
-  } else {alert('저장 기능 로딩 중이에요. 잠시 후 다시 눌러주세요.');}
-}
-function sharePhoto(){
-  var txt='고집돌우럭에서 네컷 찍었어요! 🐟
+  } else { alert('저장 기능 로딩 중이에요. 잠시 후 다시 눌러주세요.'); }
+});
+
+document.getElementById('share-btn').addEventListener('click', function() {
+  var txt = '고집돌우럭에서 네컷 찍었어요! 🐟
 #고집돌우럭 #제주맛집 #제주네컷';
-  if(navigator.share){navigator.share({title:'고집돌우럭 네컷',text:txt});}
-  else{navigator.clipboard&&navigator.clipboard.writeText(txt).then(function(){alert('공유 문구가 복사됐어요!');});}
-}
-function restart(){
-  photos=[];for(var i=0;i<4;i++){document.getElementById('slot-'+i).innerHTML='';}
-  updateDots();show('s-intro');
-}
+  if (navigator.share) { navigator.share({ title: '고집돌우럭 네컷', text: txt }); }
+  else { navigator.clipboard && navigator.clipboard.writeText(txt).then(function() { alert('공유 문구가 복사됐어요!'); }); }
+});
+
+document.getElementById('restart-btn').addEventListener('click', function() {
+  photos = [];
+  for (var i = 0; i < 4; i++) { document.getElementById('slot-' + i).innerHTML = ''; }
+  updateDots();
+  show('s-intro');
+});
+
 updateDots();
 </script>
 </body>
