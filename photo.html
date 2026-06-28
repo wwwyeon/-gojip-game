@@ -72,7 +72,7 @@ canvas{display:none;}
   <div class="screen active" id="s-intro">
     <div class="intro-wrap">
       <div class="intro-title-box">
-        <div class="intro-title">GOJIP PHOTO BOOTH</div>
+        <div class="intro-title">GOZIP PHOTO BOOTH</div>
       </div>
 
       <!-- 포토부스 일러스트 SVG -->
@@ -229,7 +229,7 @@ canvas{display:none;}
 <script>
 var photos=[],stream=null,counting=false;
 
-function enterBooth(){
+function enterBooth(){navigator.mediaDevices&&navigator.mediaDevices.getUserMedia({video:true,audio:false}).then(function(s){stream=s;show("s-cam");var v=document.getElementById("preview");v.srcObject=s;document.getElementById("no-cam").style.display="none";}).catch(function(){alert("카메라 권한을 허용해주세요!");});return;
   show('s-cam');
   startCamera();
 }
