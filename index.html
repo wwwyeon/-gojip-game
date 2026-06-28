@@ -23,22 +23,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .prog-lbl{font-size:12px;color:#888;text-align:right;margin-top:5px;}
 
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
-.item{background:#fff;border:1.5px solid #e8e0d8;border-radius:14px;padding:14px 8px 12px;text-align:center;cursor:pointer;position:relative;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:border-color 0.2s,background 0.2s;}
+.item{background:#fff;border:1.5px solid #e8e0d8;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:border-color 0.2s;}
 .item:active{transform:scale(0.96);}
-.item.caught{border-color:#c0392b;background:#fff5f5;}
-.item.caught .ico{opacity:1;}
-.item.caught .lbl{color:#c0392b;font-weight:600;}
+.item.caught{border-color:#c0392b;}
+
+/* 찍은 사진이 슬롯에 들어가는 영역 */
+.item-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s;border-radius:12px;}
+.item.caught .item-photo{opacity:1;}
+.item-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background 0.3s;border-radius:12px;}
+.item.caught .item-overlay{background:rgba(0,0,0,0.18);}
+
+.item-front{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px 10px;}
 .ico{font-size:30px;opacity:0.25;transition:opacity 0.2s;}
-.lbl{font-size:11px;color:#888;line-height:1.4;}
-.ck{position:absolute;top:6px;right:6px;width:18px;height:18px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.item.caught .ico{opacity:0;}
+.lbl{font-size:11px;color:#888;line-height:1.4;text-align:center;}
+.item.caught .lbl{color:#fff;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
+
+.ck{position:absolute;top:6px;right:6px;z-index:2;width:20px;height:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
 .item.caught .ck{opacity:1;}
-.ck svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;}
+.ck svg{width:11px;height:11px;stroke:#fff;stroke-width:2.5;fill:none;}
+
+/* 사진 들어올 때 애니메이션 */
+@keyframes photoIn{
+  0%{transform:scale(1.15);opacity:0;}
+  100%{transform:scale(1);opacity:1;}
+}
+.item.caught .item-photo{animation:photoIn 0.35s ease forwards;}
 
 .partial{background:#fff;border:1px solid #e8e0d8;border-radius:10px;padding:11px 14px;font-size:13px;color:#555;margin:4px 0 10px;}
 
 .btn-red{width:100%;padding:16px;background:#c0392b;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;}
 .btn-red:active{opacity:0.85;}
-.btn-red:disabled{background:#ccc;cursor:default;}
 .tip{font-size:12px;color:#aaa;text-align:center;margin-top:10px;}
 
 /* 카메라 화면 */
@@ -49,19 +64,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .scan-frame::before,.scan-frame::after{content:'';position:absolute;width:24px;height:24px;border-color:#fff;border-style:solid;}
 .scan-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
 .scan-frame::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
-.scan-hint{color:rgba(255,255,255,0.7);font-size:12px;margin-top:10px;}
+.scan-hint-cam{color:rgba(255,255,255,0.7);font-size:12px;margin-top:10px;}
 
-.cam-status{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:16px;}
+.cam-status{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
 .cam-status.on{display:flex;}
-.status-scanning{background:rgba(0,0,0,0.55);}
-.status-ok{background:rgba(39,174,96,0.88);}
-.status-fail{background:rgba(192,57,43,0.88);}
+.st-scanning{background:rgba(0,0,0,0.55);}
+.st-ok{background:rgba(39,174,96,0.88);}
+.st-fail{background:rgba(192,57,43,0.88);}
 .status-txt{color:#fff;font-size:15px;font-weight:700;text-align:center;line-height:1.5;}
 
-/* 카메라 권한 거부 시 */
 .no-cam{position:absolute;inset:0;background:#222;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:16px;}
 .no-cam.show{display:flex;}
 .no-cam-txt{color:rgba(255,255,255,0.7);font-size:13px;text-align:center;line-height:1.6;padding:0 20px;}
+
+/* 찍는 순간 플래시 */
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;border-radius:16px;transition:opacity 0.05s;}
+.flash.on{opacity:0.7;}
 
 .cam-info{text-align:center;margin:8px 0 10px;}
 .cam-emoji{font-size:24px;}
@@ -84,6 +102,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .result-big{font-size:60px;margin-bottom:14px;}
 .result-ttl{font-size:22px;font-weight:700;color:#1a1a1a;margin-bottom:8px;}
 .result-sub{font-size:14px;color:#666;line-height:1.7;margin-bottom:18px;}
+
+/* 결과 도감 미니 그리드 */
+.result-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:18px;}
+.result-slot{border-radius:8px;overflow:hidden;aspect-ratio:1;background:#e8e0d8;position:relative;}
+.result-slot img{width:100%;height:100%;object-fit:cover;}
+.result-slot-lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.45);color:#fff;font-size:8px;text-align:center;padding:2px 0;}
+
 .coupon{background:#fff5f5;border:2px dashed #c0392b;border-radius:14px;padding:18px;margin-bottom:14px;}
 .coup-lbl{font-size:10px;color:#c0392b;font-weight:700;letter-spacing:0.1em;margin-bottom:8px;}
 .coup-code{font-size:24px;font-weight:700;color:#c0392b;letter-spacing:0.12em;}
@@ -92,12 +117,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-outline:active{background:#f5f5f5;}
 .btn-restart{width:100%;padding:14px;background:#c0392b;color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;-webkit-appearance:none;}
 .btn-restart:active{opacity:0.85;}
+
+canvas{display:none;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- 메인 -->
+  <!-- 메인 도감 -->
   <div class="screen active" id="s-main">
     <div class="header">
       <div class="logo">🐟</div>
@@ -111,24 +138,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="grid" id="grid">
       <div class="item" onclick="openCam(0)">
+        <img class="item-photo" id="photo-0">
+        <div class="item-overlay"></div>
         <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="ico">👵</div><div class="lbl">입구<br>할머니</div>
+        <div class="item-front"><div class="ico">👵</div><div class="lbl">입구<br>할머니</div></div>
       </div>
       <div class="item" onclick="openCam(1)">
+        <img class="item-photo" id="photo-1">
+        <div class="item-overlay"></div>
         <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="ico">🐟</div><div class="lbl">고집돌<br>우럭조림</div>
+        <div class="item-front"><div class="ico">🐟</div><div class="lbl">고집돌<br>우럭조림</div></div>
       </div>
       <div class="item" onclick="openCam(2)">
+        <img class="item-photo" id="photo-2">
+        <div class="item-overlay"></div>
         <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="ico">🍚</div><div class="lbl">낭푼밥</div>
+        <div class="item-front"><div class="ico">🍚</div><div class="lbl">낭푼밥</div></div>
       </div>
       <div class="item" onclick="openCam(3)">
+        <img class="item-photo" id="photo-3">
+        <div class="item-overlay"></div>
         <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="ico">🐠</div><div class="lbl">옥돔구이</div>
+        <div class="item-front"><div class="ico">🐠</div><div class="lbl">옥돔구이</div></div>
       </div>
       <div class="item" onclick="openCam(4)">
+        <img class="item-photo" id="photo-4">
+        <div class="item-overlay"></div>
         <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="ico">📸</div><div class="lbl">우럭<br>프로젝트</div>
+        <div class="item-front"><div class="ico">📸</div><div class="lbl">우럭<br>프로젝트</div></div>
       </div>
     </div>
     <div id="partial-area"></div>
@@ -140,19 +177,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="screen" id="s-cam">
     <div class="cam-wrap">
       <video id="preview" autoplay playsinline muted></video>
+      <canvas id="snap-canvas"></canvas>
       <div class="cam-overlay">
         <div class="scan-frame"></div>
-        <div class="scan-hint">프레임 안에 맞춰주세요</div>
+        <div class="scan-hint-cam">프레임 안에 맞춰주세요</div>
       </div>
-      <div class="cam-status status-scanning" id="st-scanning">
+      <div class="flash" id="flash"></div>
+      <div class="cam-status st-scanning" id="st-scanning">
         <div id="scan-ico" style="font-size:40px">🐟</div>
         <div class="status-txt">AI 인식 중...</div>
       </div>
-      <div class="cam-status status-ok" id="st-ok">
+      <div class="cam-status st-ok" id="st-ok">
         <div style="font-size:44px">✅</div>
         <div class="status-txt">채집 성공!</div>
       </div>
-      <div class="cam-status status-fail" id="st-fail">
+      <div class="cam-status st-fail" id="st-fail">
         <div style="font-size:44px">❌</div>
         <div class="status-txt">인식 실패<br>다시 찍어주세요</div>
       </div>
@@ -183,6 +222,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="result-big">🎉</div>
       <div class="result-ttl">황금조합 완성!</div>
       <div class="result-sub">5가지 채집을 모두 완료했어요.<br>아래 쿠폰을 직원에게 보여주세요.</div>
+      <div class="result-grid" id="result-grid"></div>
       <div class="coupon">
         <div class="coup-lbl">REWARD COUPON</div>
         <div class="coup-code">GOJIP-2026</div>
@@ -203,6 +243,7 @@ var targets=[
   {e:'📸',n:'우럭 프로젝트'}
 ];
 var caught=[false,false,false,false,false];
+var photos=[null,null,null,null,null];
 var cur=-1;
 var capturing=false;
 var stream=null;
@@ -233,7 +274,7 @@ function updateUI(){
 
 function mainBtnClick(){
   var n=caught.filter(Boolean).length;
-  if(n===5){show('s-result');return;}
+  if(n===5){buildResult();show('s-result');return;}
   var idx=caught.findIndex(function(c){return !c;});
   if(idx>=0)openCam(idx);
 }
@@ -243,32 +284,20 @@ function startCamera(){
   var noCam=document.getElementById('no-cam');
   if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
     navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
-    .then(function(s){
-      stream=s;
-      video.srcObject=s;
-      noCam.classList.remove('show');
-    })
-    .catch(function(){
-      noCam.classList.add('show');
-    });
-  } else {
-    noCam.classList.add('show');
-  }
+    .then(function(s){stream=s;video.srcObject=s;noCam.classList.remove('show');})
+    .catch(function(){noCam.classList.add('show');});
+  } else {noCam.classList.add('show');}
 }
 
 function stopCamera(){
-  if(stream){
-    stream.getTracks().forEach(function(t){t.stop();});
-    stream=null;
-  }
-  var video=document.getElementById('preview');
-  video.srcObject=null;
+  if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
+  document.getElementById('preview').srcObject=null;
 }
 
 function openCam(idx){
   if(caught[idx]){
     var next=caught.findIndex(function(c,i){return !c&&i!==idx;});
-    if(next<0){show('s-result');return;}
+    if(next<0){buildResult();show('s-result');return;}
     idx=next;
   }
   cur=idx;
@@ -282,27 +311,49 @@ function openCam(idx){
 
 function resetCam(){
   capturing=false;
-  document.getElementById('st-scanning').classList.remove('on');
-  document.getElementById('st-ok').classList.remove('on');
-  document.getElementById('st-fail').classList.remove('on');
+  ['st-scanning','st-ok','st-fail'].forEach(function(id){document.getElementById(id).classList.remove('on');});
   document.getElementById('cam-hint').textContent='카메라로 찍어서 채집하세요';
   var sh=document.getElementById('shutter');
-  sh.style.opacity='1';
-  sh.style.pointerEvents='';
+  sh.style.opacity='1';sh.style.pointerEvents='';
   document.getElementById('retry-btn').classList.remove('show');
+  document.getElementById('flash').classList.remove('on');
+}
+
+function snapPhoto(){
+  var video=document.getElementById('preview');
+  var canvas=document.getElementById('snap-canvas');
+  canvas.width=video.videoWidth||320;
+  canvas.height=video.videoHeight||240;
+  var ctx=canvas.getContext('2d');
+  ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  return canvas.toDataURL('image/jpeg',0.7);
 }
 
 function capture(){
   if(capturing)return;
   capturing=true;
   var sh=document.getElementById('shutter');
-  sh.style.opacity='0.4';
-  sh.style.pointerEvents='none';
+  sh.style.opacity='0.4';sh.style.pointerEvents='none';
+
+  // 플래시 효과
+  var flash=document.getElementById('flash');
+  flash.classList.add('on');
+  setTimeout(function(){flash.classList.remove('on');},120);
+
+  // 사진 캡처
+  var dataUrl=snapPhoto();
+
   document.getElementById('st-scanning').classList.add('on');
+
   setTimeout(function(){
     document.getElementById('st-scanning').classList.remove('on');
     var success=Math.random()<0.7;
     if(success){
+      // 사진을 슬롯에 저장
+      photos[cur]=dataUrl;
+      var img=document.getElementById('photo-'+cur);
+      img.src=dataUrl;
+
       document.getElementById('st-ok').classList.add('on');
       document.getElementById('cam-hint').textContent='채집 완료!';
       setTimeout(function(){
@@ -310,22 +361,37 @@ function capture(){
         stopCamera();
         show('s-main');
         updateUI();
-      },1000);
+      },900);
     } else {
       document.getElementById('st-fail').classList.add('on');
       document.getElementById('cam-hint').textContent='대상을 정확히 프레임에 맞춰주세요';
       document.getElementById('retry-btn').classList.add('show');
       capturing=false;
-      sh.style.opacity='1';
-      sh.style.pointerEvents='';
+      sh.style.opacity='1';sh.style.pointerEvents='';
     }
   },1400);
 }
 
-function goMain(){
-  stopCamera();
-  show('s-main');
+function buildResult(){
+  var rg=document.getElementById('result-grid');
+  rg.innerHTML='';
+  for(var i=0;i<5;i++){
+    var slot=document.createElement('div');
+    slot.className='result-slot';
+    if(photos[i]){
+      var img=document.createElement('img');
+      img.src=photos[i];
+      slot.appendChild(img);
+    }
+    var lbl=document.createElement('div');
+    lbl.className='result-slot-lbl';
+    lbl.textContent=targets[i].n.replace(' ','\n');
+    slot.appendChild(lbl);
+    rg.appendChild(slot);
+  }
 }
+
+function goMain(){stopCamera();show('s-main');}
 
 function share(){
   var txt='고집돌우럭 황금조합 채집 완료! 🎉🐟\n#고집돌우럭 #제주맛집 #황금조합';
@@ -335,6 +401,11 @@ function share(){
 
 function restart(){
   caught=[false,false,false,false,false];
+  photos=[null,null,null,null,null];
+  for(var i=0;i<5;i++){
+    var img=document.getElementById('photo-'+i);
+    img.src='';
+  }
   updateUI();
   show('s-main');
 }
