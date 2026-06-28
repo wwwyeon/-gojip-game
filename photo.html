@@ -307,8 +307,7 @@ document.getElementById('save-btn').addEventListener('click', function() {
 });
 
 document.getElementById('share-btn').addEventListener('click', function() {
-  var txt = '고집돌우럭에서 네컷 찍었어요! 🐟
-#고집돌우럭 #제주맛집 #제주네컷';
+  var txt = '고집돌우럭에서 네컷 찍었어요! 🐟 #고집돌우럭 #제주맛집 #제주네컷';
   if (navigator.share) { navigator.share({ title: '고집돌우럭 네컷', text: txt }); }
   else { navigator.clipboard && navigator.clipboard.writeText(txt).then(function() { alert('공유 문구가 복사됐어요!'); }); }
 });
