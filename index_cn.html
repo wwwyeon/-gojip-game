@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>高吉 济州岛海鲜 黄金套餐集齐游戏</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB',sans-serif;background:#f8f4f0;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+.wrap{width:100%;max-width:420px;padding:16px;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+.header{text-align:center;padding:20px 0 14px;}
+.logo{font-size:28px;margin-bottom:8px;}
+.badge{display:inline-block;background:#c0392b;color:#fff;font-size:11px;padding:4px 12px;border-radius:20px;margin-bottom:10px;letter-spacing:0.04em;}
+.title{font-size:22px;font-weight:700;color:#1a1a1a;line-height:1.3;}
+.sub{font-size:13px;color:#666;margin-top:5px;line-height:1.6;}
+
+.prog-wrap{margin:14px 0 5px;}
+.prog-bar{background:#e8e0d8;border-radius:20px;height:9px;overflow:hidden;}
+.prog-fill{height:100%;background:#c0392b;border-radius:20px;transition:width 0.4s ease;width:0%;}
+.prog-lbl{font-size:12px;color:#888;text-align:right;margin-top:5px;}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
+.item{background:#fff;border:1.5px solid #e8e0d8;border-radius:14px;padding:14px 8px 12px;text-align:center;cursor:pointer;position:relative;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:border-color 0.2s,background 0.2s;}
+.item:active{transform:scale(0.96);}
+.item.caught{border-color:#c0392b;background:#fff5f5;}
+.item.caught .ico{opacity:1;}
+.item.caught .lbl{color:#c0392b;font-weight:600;}
+.ico{font-size:30px;opacity:0.25;transition:opacity 0.2s;}
+.lbl{font-size:11px;color:#888;line-height:1.5;}
+.ck{position:absolute;top:6px;right:6px;width:18px;height:18px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.item.caught .ck{opacity:1;}
+.ck svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;}
+
+.partial{background:#fff;border:1px solid #e8e0d8;border-radius:10px;padding:11px 14px;font-size:13px;color:#555;margin:4px 0 10px;line-height:1.6;}
+
+.btn-red{width:100%;padding:16px;background:#c0392b;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;}
+.btn-red:active{opacity:0.85;}
+.btn-red:disabled{background:#ccc;cursor:default;}
+.tip{font-size:12px;color:#aaa;text-align:center;margin-top:10px;line-height:1.6;}
+
+.cam-box{background:#111;border-radius:16px;height:250px;margin:10px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.scan-frame{width:170px;height:170px;border:2px solid rgba(255,255,255,0.5);border-radius:12px;position:relative;}
+.scan-frame::before,.scan-frame::after{content:'';position:absolute;width:24px;height:24px;border-color:#fff;border-style:solid;}
+.scan-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
+.scan-frame::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
+.scan-hint{color:rgba(255,255,255,0.6);font-size:12px;margin-top:12px;}
+
+.scanning{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:16px;background:rgba(0,0,0,0.5);}
+.scanning.on{display:flex;}
+.scanning-txt{color:#fff;font-size:14px;font-weight:600;}
+
+.result-ok{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:16px;background:rgba(39,174,96,0.85);}
+.result-ok.on{display:flex;}
+.result-ok-txt{color:#fff;font-size:16px;font-weight:700;}
+
+.result-fail{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:16px;background:rgba(192,57,43,0.85);}
+.result-fail.on{display:flex;}
+.result-fail-txt{color:#fff;font-size:16px;font-weight:700;text-align:center;line-height:1.6;}
+
+.cam-info{text-align:center;margin:8px 0 10px;}
+.cam-emoji{font-size:24px;}
+.cam-name{font-size:15px;font-weight:600;color:#1a1a1a;margin-top:5px;}
+.cam-hint{font-size:12px;color:#999;margin-top:3px;}
+
+.shutter-wrap{display:flex;justify-content:center;margin-bottom:6px;}
+.shutter{width:66px;height:66px;border-radius:50%;background:#fff;border:5px solid rgba(0,0,0,0.1);box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.shutter:active{transform:scale(0.93);}
+.shutter-in{width:52px;height:52px;border-radius:50%;background:#fff;border:2px solid #e0e0e0;}
+
+.cam-btns{display:flex;gap:8px;margin-top:8px;}
+.btn-back{flex:1;background:#fff;border:1.5px solid #e8e0d8;border-radius:10px;padding:12px;font-size:13px;color:#555;cursor:pointer;-webkit-appearance:none;text-align:center;}
+.btn-back:active{background:#f5f5f5;}
+.btn-retry{flex:1;background:#c0392b;color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;-webkit-appearance:none;display:none;}
+.btn-retry:active{opacity:0.85;}
+.btn-retry.show{display:block;}
+
+.result{text-align:center;padding:16px 0 24px;}
+.result-big{font-size:60px;margin-bottom:14px;}
+.result-ttl{font-size:22px;font-weight:700;color:#1a1a1a;margin-bottom:8px;}
+.result-sub{font-size:14px;color:#666;line-height:1.8;margin-bottom:18px;}
+.coupon{background:#fff5f5;border:2px dashed #c0392b;border-radius:14px;padding:18px;margin-bottom:14px;}
+.coup-lbl{font-size:10px;color:#c0392b;font-weight:700;letter-spacing:0.1em;margin-bottom:8px;}
+.coup-code{font-size:24px;font-weight:700;color:#c0392b;letter-spacing:0.12em;}
+.coup-desc{font-size:12px;color:#888;margin-top:8px;line-height:1.6;}
+.btn-outline{width:100%;padding:14px;background:#fff;border:1.5px solid #ddd;border-radius:14px;font-size:14px;color:#333;cursor:pointer;margin-bottom:10px;-webkit-appearance:none;}
+.btn-outline:active{background:#f5f5f5;}
+.btn-restart{width:100%;padding:14px;background:#c0392b;color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;-webkit-appearance:none;}
+.btn-restart:active{opacity:0.85;}
+
+.lang-switch{position:absolute;top:16px;right:16px;}
+.lang-btn{background:#fff;border:1px solid #e8e0d8;border-radius:20px;padding:5px 12px;font-size:12px;color:#888;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="wrap" style="position:relative;">
+
+  <!-- 메인 -->
+  <div class="screen active" id="s-main">
+    <div class="lang-switch">
+      <button class="lang-btn" onclick="location.href='index.html'">한국어</button>
+    </div>
+    <div class="header">
+      <div class="logo">🐟</div>
+      <div class="badge">济州岛人气餐厅 高吉 济州岛海鲜</div>
+      <div class="title">集齐黄金套餐<br>赢取专属优惠！</div>
+      <div class="sub">拍下5样招牌美食，即可获得神秘奖励 🎁</div>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+      <div class="prog-lbl" id="pl">已收集 0 / 5</div>
+    </div>
+
+    <div class="grid" id="grid">
+      <div class="item" onclick="openCam(0)">
+        <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <div class="ico">👵</div>
+        <div class="lbl">门口<br>奶奶</div>
+      </div>
+      <div class="item" onclick="openCam(1)">
+        <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <div class="ico">🐟</div>
+        <div class="lbl">红烧<br>石斑鱼</div>
+      </div>
+      <div class="item" onclick="openCam(2)">
+        <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <div class="ico">🍚</div>
+        <div class="lbl">济州<br>大碗饭</div>
+      </div>
+      <div class="item" onclick="openCam(3)">
+        <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <div class="ico">🐠</div>
+        <div class="lbl">烤玉东<br>鱼</div>
+      </div>
+      <div class="item" onclick="openCam(4)">
+        <div class="ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <div class="ico">📸</div>
+        <div class="lbl">品牌<br>招牌墙</div>
+      </div>
+    </div>
+
+    <div id="partial-area"></div>
+
+    <button class="btn-red" id="main-btn" onclick="mainBtnClick()">📷 开始收集</button>
+    <div class="tip">点击任意图标，或按下「开始收集」按钮<br>用相机拍下对应的菜品或场景</div>
+  </div>
+
+  <!-- 카메라 -->
+  <div class="screen" id="s-cam">
+    <div class="cam-box">
+      <div class="scan-frame"></div>
+      <div class="scan-hint">请将目标对准框内拍摄</div>
+      <div class="scanning" id="scan-anim">
+        <div id="scan-ico" style="font-size:40px">🐟</div>
+        <div class="scanning-txt">AI 识别中...</div>
+      </div>
+      <div class="result-ok" id="ok-anim">
+        <div style="font-size:44px">✅</div>
+        <div class="result-ok-txt">收集成功！</div>
+      </div>
+      <div class="result-fail" id="fail-anim">
+        <div style="font-size:44px">❌</div>
+        <div class="result-fail-txt">识别失败<br>请重新拍摄</div>
+      </div>
+    </div>
+    <div class="cam-info">
+      <div class="cam-emoji" id="cam-emoji">🐟</div>
+      <div class="cam-name" id="cam-name">招牌炖海鲜</div>
+      <div class="cam-hint" id="cam-hint">用相机对准目标拍摄</div>
+    </div>
+    <div class="shutter-wrap">
+      <div class="shutter" id="shutter" onclick="capture()">
+        <div class="shutter-in"></div>
+      </div>
+    </div>
+    <div class="cam-btns">
+      <button class="btn-back" onclick="goMain()">← 返回</button>
+      <button class="btn-retry" id="retry-btn" onclick="resetCam()">重新拍摄</button>
+    </div>
+  </div>
+
+  <!-- 완료 -->
+  <div class="screen" id="s-result">
+    <div class="result">
+      <div class="result-big">🎉</div>
+      <div class="result-ttl">黄金套餐集齐啦！</div>
+      <div class="result-sub">恭喜您完成全部5项收集！<br>请将下方优惠券出示给店员。</div>
+      <div class="coupon">
+        <div class="coup-lbl">专属优惠券 COUPON</div>
+        <div class="coup-code">GOJIP-2026</div>
+        <div class="coup-desc">下次到店享9折优惠<br>有效期30天 · 每人限用一次</div>
+      </div>
+      <button class="btn-outline" onclick="share()">📤 分享到小红书</button>
+      <button class="btn-restart" onclick="restart()">再来一次</button>
+    </div>
+  </div>
+
+</div>
+<script>
+var targets=[
+  {e:'👵',n:'门口奶奶'},
+  {e:'🐟',n:'招牌炖海鲜'},
+  {e:'🍚',n:'济州大碗饭'},
+  {e:'🐠',n:'烤玉东鱼'},
+  {e:'📸',n:'品牌招牌墙'}
+];
+var caught=[false,false,false,false,false];
+var cur=-1;
+var capturing=false;
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function updateUI(){
+  var n=caught.filter(Boolean).length;
+  document.getElementById('pf').style.width=(n/5*100)+'%';
+  document.getElementById('pl').textContent='已收集 '+n+' / 5';
+  var items=document.getElementById('grid').children;
+  for(var i=0;i<5;i++){
+    if(caught[i])items[i].classList.add('caught');
+    else items[i].classList.remove('caught');
+  }
+  var pa=document.getElementById('partial-area');
+  if(n>=3&&n<5){
+    pa.innerHTML='<div class="partial">🎁 已收集3项！凭此可享受免费饮品一杯</div>';
+  } else { pa.innerHTML=''; }
+  var btn=document.getElementById('main-btn');
+  if(n===5){
+    btn.textContent='🎁 领取奖励！';
+    btn.disabled=false;
+  } else {
+    btn.innerHTML='📷 开始收集';
+    btn.disabled=false;
+  }
+}
+
+function mainBtnClick(){
+  var n=caught.filter(Boolean).length;
+  if(n===5){show('s-result');return;}
+  var idx=caught.findIndex(function(c){return !c;});
+  if(idx>=0)openCam(idx);
+}
+
+function openCam(idx){
+  if(caught[idx]){
+    var next=caught.findIndex(function(c,i){return !c&&i!==idx;});
+    if(next<0){show('s-result');return;}
+    idx=next;
+  }
+  cur=idx;
+  document.getElementById('cam-emoji').textContent=targets[idx].e;
+  document.getElementById('cam-name').textContent=targets[idx].n;
+  document.getElementById('scan-ico').textContent=targets[idx].e;
+  resetCam();
+  show('s-cam');
+}
+
+function resetCam(){
+  capturing=false;
+  document.getElementById('scan-anim').classList.remove('on');
+  document.getElementById('ok-anim').classList.remove('on');
+  document.getElementById('fail-anim').classList.remove('on');
+  document.getElementById('cam-hint').textContent='用相机对准目标拍摄';
+  var sh=document.getElementById('shutter');
+  sh.style.opacity='1';
+  sh.style.pointerEvents='';
+  document.getElementById('retry-btn').classList.remove('show');
+}
+
+function capture(){
+  if(capturing)return;
+  capturing=true;
+  var sh=document.getElementById('shutter');
+  sh.style.opacity='0.4';
+  sh.style.pointerEvents='none';
+  document.getElementById('scan-anim').classList.add('on');
+  setTimeout(function(){
+    document.getElementById('scan-anim').classList.remove('on');
+    var success=Math.random()<0.7;
+    if(success){
+      document.getElementById('ok-anim').classList.add('on');
+      document.getElementById('cam-hint').textContent='收集成功！';
+      setTimeout(function(){
+        caught[cur]=true;
+        show('s-main');
+        updateUI();
+      },1000);
+    } else {
+      document.getElementById('fail-anim').classList.add('on');
+      document.getElementById('cam-hint').textContent='请将目标完整地对准框内';
+      document.getElementById('retry-btn').classList.add('show');
+      capturing=false;
+      sh.style.opacity='1';
+      sh.style.pointerEvents='';
+    }
+  },1400);
+}
+
+function goMain(){show('s-main');}
+
+function share(){
+  var txt='在济州岛高吉 济州岛海鲜完成黄金套餐收集！🎉🐟\n#济州岛美食 #高吉 济州岛海鲜 #济州旅行';
+  if(navigator.share){
+    navigator.share({title:'高吉 济州岛海鲜 黄金套餐收集完成！',text:txt});
+  } else {
+    navigator.clipboard&&navigator.clipboard.writeText(txt).then(function(){alert('分享文案已复制！');});
+  }
+}
+
+function restart(){
+  caught=[false,false,false,false,false];
+  updateUI();
+  show('s-main');
+}
+
+updateUI();
+</script>
+</body>
+</html>
