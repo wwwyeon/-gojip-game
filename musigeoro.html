@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>무시거 앱</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;min-height:100vh;display:flex;justify-content:center;}
+.app{width:100%;max-width:390px;background:#fff;min-height:100vh;display:flex;flex-direction:column;}
+.status-bar{padding:12px 16px 0;display:flex;justify-content:space-between;align-items:center;}
+.status-time{font-size:12px;font-weight:500;color:#1a1a1a;}
+.header{padding:16px 16px 0;}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.logo{font-size:20px;font-weight:700;color:#1a1a1a;}
+.logo span{color:#2d6a4f;}
+.header-icons{display:flex;gap:12px;}
+.header-icons i{font-size:20px;color:#666;}
+.tab-bar{display:flex;border-bottom:1px solid #eee;padding:0 16px;}
+.tab{flex:1;text-align:center;padding:10px 0;font-size:13px;color:#aaa;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab.active{color:#2d6a4f;border-bottom:2px solid #2d6a4f;font-weight:500;}
+.content{display:none;padding:16px;flex:1;overflow-y:auto;}
+.content.active{display:block;}
+
+.news-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0;}
+.news-item:last-child{border-bottom:none;}
+.news-thumb{width:72px;height:72px;border-radius:8px;background:#f5f5f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.news-thumb i{font-size:24px;color:#bbb;}
+.news-body{flex:1;min-width:0;}
+.news-tag{font-size:11px;color:#2d6a4f;font-weight:500;margin-bottom:4px;}
+.news-title{font-size:14px;font-weight:500;color:#1a1a1a;line-height:1.4;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.news-time{font-size:11px;color:#aaa;}
+
+.cat-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tab{white-space:nowrap;font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid #eee;color:#888;cursor:pointer;background:#f9f9f9;}
+.cat-tab.active{background:#2d6a4f;color:#fff;border-color:#2d6a4f;}
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.content-card{background:#f9f9f9;border-radius:10px;overflow:hidden;border:1px solid #eee;cursor:pointer;}
+.content-thumb{height:90px;background:#f0f0ec;display:flex;align-items:center;justify-content:center;}
+.content-thumb i{font-size:28px;color:#bbb;}
+.content-info{padding:8px;}
+.content-cat{font-size:10px;color:#2d6a4f;font-weight:500;margin-bottom:3px;}
+.content-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.4;}
+
+.bamboo-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.bamboo-tabs::-webkit-scrollbar{display:none;}
+.bamboo-tab{white-space:nowrap;font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid #eee;color:#888;cursor:pointer;background:#f9f9f9;}
+.bamboo-tab.active{background:#2d6a4f;color:#fff;border-color:#2d6a4f;}
+.post-item{background:#f9f9f9;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #eee;}
+.post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.post-board{font-size:11px;color:#2d6a4f;font-weight:500;}
+.post-time{font-size:11px;color:#aaa;}
+.post-content{font-size:13px;color:#1a1a1a;line-height:1.6;margin-bottom:8px;}
+.post-footer{display:flex;gap:12px;}
+.post-action{display:flex;align-items:center;gap:4px;font-size:12px;color:#aaa;}
+.post-action i{font-size:14px;}
+.write-btn{width:100%;padding:13px;background:#2d6a4f;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;}
+.write-btn:active{opacity:0.85;}
+
+.bottom-nav{border-top:1px solid #eee;display:flex;padding:8px 0 20px;background:#fff;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.nav-item i{font-size:22px;color:#ccc;}
+.nav-item.active i{color:#2d6a4f;}
+.nav-label{font-size:10px;color:#ccc;}
+.nav-item.active .nav-label{color:#2d6a4f;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <i class="ti ti-wifi" style="font-size:14px;color:#1a1a1a"></i>
+  </div>
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">무<span>시</span>거</div>
+      <div class="header-icons">
+        <i class="ti ti-search"></i>
+        <i class="ti ti-bell"></i>
+      </div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('news',this)">뉴스</div>
+    <div class="tab" onclick="switchTab('content',this)">콘텐츠</div>
+    <div class="tab" onclick="switchTab('bamboo',this)">대나무숲</div>
+  </div>
+
+  <div class="content active" id="tab-news">
+    <div class="news-item">
+      <div class="news-thumb"><i class="ti ti-map-pin"></i></div>
+      <div class="news-body"><div class="news-tag">제주 로컬</div><div class="news-title">제주 성산읍 해녀 축제, 올해도 열린다</div><div class="news-time">2시간 전</div></div>
+    </div>
+    <div class="news-item">
+      <div class="news-thumb"><i class="ti ti-building"></i></div>
+      <div class="news-body"><div class="news-tag">제주 정책</div><div class="news-title">제주 렌터카 총량제 확대 시행 예정</div><div class="news-time">4시간 전</div></div>
+    </div>
+    <div class="news-item">
+      <div class="news-thumb"><i class="ti ti-fish"></i></div>
+      <div class="news-body"><div class="news-tag">제주 문화</div><div class="news-title">제주 전통 음식 '몸국', 향토 음식 등재 추진</div><div class="news-time">6시간 전</div></div>
+    </div>
+    <div class="news-item">
+      <div class="news-thumb"><i class="ti ti-mountain"></i></div>
+      <div class="news-body"><div class="news-tag">제주 자연</div><div class="news-title">한라산 영실 코스 탐방로 일부 통제 해제</div><div class="news-time">어제</div></div>
+    </div>
+  </div>
+
+  <div class="content" id="tab-content">
+    <div class="cat-tabs">
+      <div class="cat-tab active" onclick="switchCat(this,'food')">food</div>
+      <div class="cat-tab" onclick="switchCat(this,'desert')">desert</div>
+      <div class="cat-tab" onclick="switchCat(this,'culture')">culture</div>
+      <div class="cat-tab" onclick="switchCat(this,'story')">story</div>
+      <div class="cat-tab" onclick="switchCat(this,'life')">life</div>
+      <div class="cat-tab" onclick="switchCat(this,'weather')">weather</div>
+      <div class="cat-tab" onclick="switchCat(this,'trip')">trip</div>
+      <div class="cat-tab" onclick="switchCat(this,'place')">place</div>
+      <div class="cat-tab" onclick="switchCat(this,'play')">play</div>
+    </div>
+    <div class="content-grid" id="content-grid"></div>
+  </div>
+
+  <div class="content" id="tab-bamboo">
+    <div class="bamboo-tabs">
+      <div class="bamboo-tab active" onclick="switchBamboo(this)">전체</div>
+      <div class="bamboo-tab" onclick="switchBamboo(this)">사과합써</div>
+      <div class="bamboo-tab" onclick="switchBamboo(this)">자,영업합써</div>
+      <div class="bamboo-tab" onclick="switchBamboo(this)">입다뭅써</div>
+      <div class="bamboo-tab" onclick="switchBamboo(this)">영 먹읍써</div>
+      <div class="bamboo-tab" onclick="switchBamboo(this)">봐수꽈</div>
+    </div>
+    <div class="post-item">
+      <div class="post-header"><div class="post-board">사과합써</div><div class="post-time">10분 전</div></div>
+      <div class="post-content">지난주 함덕 해수욕장에서 모래성 밟은 꼬마한테 미안합니다. 제가 너무 급하게 뛰었어요 ㅠ</div>
+      <div class="post-footer"><div class="post-action"><i class="ti ti-heart"></i> 24</div><div class="post-action"><i class="ti ti-message"></i> 3</div></div>
+    </div>
+    <div class="post-item">
+      <div class="post-header"><div class="post-board">영 먹읍써</div><div class="post-time">32분 전</div></div>
+      <div class="post-content">잔막시즌 막걸리:사이다 = 7:3이 진리임다. 저만 그런가요?</div>
+      <div class="post-footer"><div class="post-action"><i class="ti ti-heart"></i> 58</div><div class="post-action"><i class="ti ti-message"></i> 12</div></div>
+    </div>
+    <div class="post-item">
+      <div class="post-header"><div class="post-board">자,영업합써</div><div class="post-time">1시간 전</div></div>
+      <div class="post-content">성산읍 ○○칼국수 삼행시 — 성: 성의 없어 보이지만 / 산: 산해진미 다 때려넣음 / 읍: 읍읍 맛있다</div>
+      <div class="post-footer"><div class="post-action"><i class="ti ti-heart"></i> 102</div><div class="post-action"><i class="ti ti-message"></i> 7</div></div>
+    </div>
+    <button class="write-btn"><i class="ti ti-pencil"></i> 글 쓰기</button>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active"><i class="ti ti-home"></i><span class="nav-label">홈</span></div>
+    <div class="nav-item"><i class="ti ti-search"></i><span class="nav-label">탐색</span></div>
+    <div class="nav-item"><i class="ti ti-bookmark"></i><span class="nav-label">저장</span></div>
+    <div class="nav-item"><i class="ti ti-user"></i><span class="nav-label">내 정보</span></div>
+  </div>
+</div>
+<script>
+var catData={
+  food:[{icon:'ti-soup',title:'제주 몸국, 어떻게 끓여야 할까'},{icon:'ti-fish',title:'고집돌우럭 황금조합 완전 정복'},{icon:'ti-bowl',title:'제주 흑돼지, 어디서 먹어야 찐맛?'},{icon:'ti-leaf',title:'제주 봄나물 제대로 즐기는 법'}],
+  desert:[{icon:'ti-ice-cream',title:'제주 감귤 디저트 총정리'},{icon:'ti-bakery',title:'한림 숨은 베이커리 5곳'},{icon:'ti-coffee',title:'제주 카페 로드 — 서귀포편'},{icon:'ti-candy',title:'제주 흑당 디저트 맛집'}],
+  culture:[{icon:'ti-masks-theater',title:'제주 해녀 문화, 유네스코 등재의 의미'},{icon:'ti-music',title:'제주 민요 — 서우젯소리'},{icon:'ti-school',title:'제주 4·3, 우리가 기억해야 할 것들'},{icon:'ti-palette',title:'제주 돌문화공원 완전 탐방기'}],
+  story:[{icon:'ti-book',title:'제주 미제사건 — 잊혀진 이름들'},{icon:'ti-user',title:'제주 해녀 할망 인터뷰'},{icon:'ti-heart',title:'제주에 정착한 사람들의 이야기'},{icon:'ti-star',title:'제주 토박이가 말하는 진짜 제주'}],
+  life:[{icon:'ti-home',title:'제주 살아보기 — 현실적인 이야기'},{icon:'ti-car',title:'제주 교통, 렌터카 없이 살기'},{icon:'ti-shopping-cart',title:'하나로마트 제주 한정 상품들'},{icon:'ti-plant',title:'제주 텃밭 가꾸기 입문기'}],
+  weather:[{icon:'ti-cloud-rain',title:'제주 날씨 완전 정복 — 계절별 가이드'},{icon:'ti-wind',title:'제주 바람, 얼마나 강할까'},{icon:'ti-sun',title:'제주 황사·미세먼지 대응법'},{icon:'ti-snowflake',title:'제주 겨울, 생각보다 춥다'}],
+  trip:[{icon:'ti-map',title:'제주 동쪽 완전 정복 코스'},{icon:'ti-compass',title:'제주 오름 입문 — 처음이라면'},{icon:'ti-camera',title:'제주 일출 명소 TOP 5'},{icon:'ti-beach',title:'숨겨진 제주 해변 찾기'}],
+  place:[{icon:'ti-building-store',title:'성산읍 로컬 가게 지도'},{icon:'ti-map-pin',title:'제주 구도심 골목 탐방'},{icon:'ti-anchor',title:'함덕 vs 협재, 어디가 더 좋을까'},{icon:'ti-trees',title:'제주 비밀 숲길 3곳'}],
+  play:[{icon:'ti-bike',title:'제주 자전거 라이딩 코스'},{icon:'ti-swimming',title:'제주 스노클링 입문 가이드'},{icon:'ti-run',title:'제주 트레일런 대회 일정'},{icon:'ti-ball-football',title:'제주에서 즐기는 액티비티'}]
+};
+function renderContent(cat){
+  var grid=document.getElementById('content-grid');
+  grid.innerHTML=catData[cat].map(function(item){
+    return '<div class="content-card"><div class="content-thumb"><i class="ti '+item.icon+'"></i></div><div class="content-info"><div class="content-cat">'+cat+'</div><div class="content-title">'+item.title+'</div></div></div>';
+  }).join('');
+}
+function switchCat(el,cat){
+  document.querySelectorAll('.cat-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  renderContent(cat);
+}
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.content').forEach(function(c){c.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function switchBamboo(el){
+  document.querySelectorAll('.bamboo-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+}
+renderContent('food');
+</script>
+</body>
+</html>
